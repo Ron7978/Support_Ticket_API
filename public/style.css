@@ -1,13 +1,134 @@
 body {
   font-family: Arial, sans-serif;
   margin: 20px;
+  background-color: #f4f4f4;
+  color: #333;
+  text-align: center;
+}
+
+header {
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+  padding: 15px 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+h1 {
+  color: #ffffff;
+  font-size: 2em;
+  margin: 10px 10px 10px 10px;
+  text-align: center;
+}
+
+main {
+  padding-bottom: 50px; /* Avoid overlapping with fixed footer */
+}
+
+#ticketForm {
+  display: inline-block;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 form {
+  margin-top: 20px;
   margin-bottom: 20px;
+  padding: 5px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  align-items: center;
 }
 
 input, select, button {
   padding: 8px;
   margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: calc(100% - 20px);
+  box-sizing: border-box;
+}
+
+.subHead{
+  text-decoration: underline;
+  text-underline-position: below;
+  color: #043e77;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+#ticketList {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.ticket-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+table {
+  width: 65%;
+  margin-top: 20px;
+  margin: 0 auto;
+}
+
+td {
+  text-transform: capitalize;
+  text-align: center;
+}
+
+td.email {
+  text-transform: lowercase;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.update-btn {
+  background-color: #008CBA;
+}
+
+.update-btn:hover {
+  background-color: #007bb5;
+}
+
+.delete-btn{
+  background-color: #f44336;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+footer {
+  background-color: #528dc8;
+  color: #000000;
+  text-align: center;
+  /* padding: 15px 0; */
+  font-size: 0.98rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }

@@ -5,32 +5,43 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🎫 Support Ticket Dashboard</h1>
 
-  <form id="ticketForm">
-    <input type="text" id="title" placeholder="Title" required>
-    <input type="text" id="description" placeholder="Description" required>
-    <input type="email" id="customerEmail" placeholder="Customer Email" required>
-    <select id="priority">
-      <option value="low">Low</option>
-      <option value="medium">Medium</option>
-      <option value="high">High</option>
-    </select>
-    <button type="submit">Create Ticket</button>
-  </form>
+  <header>
+    <h1>🎫 Support Ticket Dashboard</h1>
+  </header>
 
-  <h2>All Tickets</h2>
-  <table border="1">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Status</th>
-        <th>Priority</th>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody id="ticketList"></tbody>
-  </table>
+  <main>
+    <form id="ticketForm">
+      <input type="text" id="title" placeholder="Title" required>
+      <input type="text" id="description" placeholder="Description" required>
+      <input type="email" id="customerEmail" placeholder="Customer Email" required>
+      <select id="priority">
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select>
+      <button type="submit">Create Ticket</button>
+    </form>
+  
+    <h2 class="subHead">All Tickets</h2>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Priority</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="ticketList"></tbody>
+    </table>
+  
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Support Ticket System | Built with ❤️</p>
+  </footer>
 
   <script src="app.js"></script>
 </body>

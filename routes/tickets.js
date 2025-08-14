@@ -108,7 +108,7 @@ router.patch('/:id', async (req, res, next) => {
   }
 });
 
-// (Optional) Delete ticket
+// Delete ticket
 router.delete('/:id', async (req, res, next) => {
   try {
     const deleted = await Ticket.findByIdAndDelete(req.params.id);

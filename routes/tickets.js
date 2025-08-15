@@ -1,16 +1,18 @@
-    const express = require('express');
-const axios = require('axios');
-const Ticket = require('../models/Ticket');
+const express = require("express");
+const axios = require("axios");
+const Ticket = require("../models/Ticket");
 
 const router = express.Router();
 
-// Create ticket
-router.post('/', async (req, res, next) => {
+// ======================
+// Create Ticket
+// ======================
+router.post("/", async (req, res, next) => {
   try {
     const { title, description, customerEmail, priority, assignee, tags } = req.body;
 
-    if (!title || typeof title !== 'string') {
-      return res.status(400).json({ error: 'title is required (string)' });
+    if (!title || typeof title !== "string") {
+      return res.status(400).json({ error: "title is required (string)" });
     }
 
     const ticket = await Ticket.create({
@@ -28,20 +30,41 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-// List tickets (with filters & pagination)
-router.get('/', async (req, res, next) => {
+// ======================
+// Ticket Stats (must be before /:id)
+// ======================
+router.get("/stats", async (req, res) => {
+  try {
+    const open = await Ticket.countDocuments({ status: "open" });
+    const inProgress = await Ticket.countDocuments({ status: "in-progress" });
+    const resolved = await Ticket.countDocuments({ status: "resolved" });
+
+    res.json({ open, inProgress, resolved });
+  } catch (err) {
+    console.error("Error fetching stats:", err);
+    res.status(500).json({ error: "Failed to fetch stats" });
+  }
+});
+
+// ======================
+// List Tickets (with filters & pagination)
+// ======================
+router.get("/", async (req, res, next) => {
   try {
     const { status, priority, page = 1, limit = 10, search } = req.query;
 
     const filter = {};
     if (status) filter.status = status;
     if (priority) filter.priority = priority;
-    if (search) filter.title = { $regex: search, $options: 'i' };
+    if (search) filter.title = { $regex: search, $options: "i" };
 
     const skip = (Number(page) - 1) * Number(limit);
 
     const [items, total] = await Promise.all([
-      Ticket.find(filter).sort({ createdAt: -1 }).skip(skip).limit(Number(limit)),
+      Ticket.find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(Number(limit)),
       Ticket.countDocuments(filter),
     ]);
 
@@ -56,35 +79,47 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// Get single ticket
-router.get('/:id', async (req, res, next) => {
+// ======================
+// Get Single Ticket
+// ======================
+router.get("/:id", async (req, res, next) => {
   try {
     const ticket = await Ticket.findById(req.params.id);
-    if (!ticket) return res.status(404).json({ error: 'Ticket not found' });
+    if (!ticket) return res.status(404).json({ error: "Ticket not found" });
     res.json(ticket);
   } catch (err) {
     next(err);
   }
 });
 
-// Update ticket (status change triggers webhook)
-router.patch('/:id', async (req, res, next) => {
+// ======================
+// Update Ticket (with optional webhook)
+// ======================
+router.patch("/:id", async (req, res, next) => {
   try {
-    const allowed = ['title', 'description', 'customerEmail', 'priority', 'status', 'assignee', 'tags'];
+    const allowed = [
+      "title",
+      "description",
+      "customerEmail",
+      "priority",
+      "status",
+      "assignee",
+      "tags",
+    ];
     const updates = {};
     Object.keys(req.body || {}).forEach((k) => {
       if (allowed.includes(k)) updates[k] = req.body[k];
     });
 
     const before = await Ticket.findById(req.params.id);
-    if (!before) return res.status(404).json({ error: 'Ticket not found' });
+    if (!before) return res.status(404).json({ error: "Ticket not found" });
 
     const ticket = await Ticket.findByIdAndUpdate(req.params.id, updates, { new: true });
 
-    // If status changed, fire webhook (best-effort)
+    // Trigger webhook if status changed
     if (updates.status && before.status !== updates.status) {
       const payload = {
-        event: 'ticket.status.changed',
+        event: "ticket.status.changed",
         ticketId: ticket._id.toString(),
         oldStatus: before.status,
         newStatus: ticket.status,
@@ -95,10 +130,10 @@ router.patch('/:id', async (req, res, next) => {
       const url = process.env.WEBHOOK_URL;
       if (url) {
         axios.post(url, payload).catch((e) => {
-          console.error('Webhook failed:', e.message);
+          console.error("Webhook failed:", e.message);
         });
       } else {
-        console.log('No WEBHOOK_URL set. Skipping webhook.');
+        console.log("No WEBHOOK_URL set. Skipping webhook.");
       }
     }
 
@@ -108,11 +143,13 @@ router.patch('/:id', async (req, res, next) => {
   }
 });
 
-// Delete ticket
-router.delete('/:id', async (req, res, next) => {
+// ======================
+// Delete Ticket
+// ======================
+router.delete("/:id", async (req, res, next) => {
   try {
     const deleted = await Ticket.findByIdAndDelete(req.params.id);
-    if (!deleted) return res.status(404).json({ error: 'Ticket not found' });
+    if (!deleted) return res.status(404).json({ error: "Ticket not found" });
     res.json({ ok: true });
   } catch (err) {
     next(err);

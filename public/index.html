@@ -1,48 +1,96 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Support Ticket System</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
-  <header>
-    <h1>🎫 Support Ticket Dashboard</h1>
-  </header>
+  <!-- Header -->
+  <header>🎫 Support Ticket System</header>
 
   <main>
-    <form id="ticketForm">
-      <input type="text" id="title" placeholder="Title" required>
-      <input type="text" id="description" placeholder="Description" required>
-      <input type="email" id="customerEmail" placeholder="Customer Email" required>
-      <select id="priority">
+
+    <!-- Ticket Form -->
+    <section>
+      <h2 class="subHead">Create New Ticket</h2>
+      <form id="ticketForm">
+        <input type="text" id="title" placeholder="Title" required />
+        <input type="text" id="description" placeholder="Description" required />
+        <input type="email" id="customerEmail" placeholder="Customer Email" required />
+        <select id="priority" required>
+          <option value="">Select Priority</option>
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+        <button type="submit">Create Ticket</button>
+      </form>
+    </section>
+
+    <!-- Stats Row -->
+    <section id="stats" style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
+      <div class="stat-card open" id="openCount">Open: 0</div>
+      <div class="stat-card progress" id="inProgressCount">In Progress: 0</div>
+      <div class="stat-card resolved" id="resolvedCount">Resolved: 0</div>
+    </section>
+
+    <!-- Filters -->
+    <section id="filters" style="margin-top: 25px;">
+      <h2 class="subHead">Filter Tickets</h2>
+      <input type="text" id="searchInput" placeholder="Search by title or email" />
+      <select id="statusFilter">
+        <option value="">All Status</option>
+        <option value="open">Open</option>
+        <option value="in-progress">In Progress</option>
+        <option value="resolved">Resolved</option>
+      </select>
+      <select id="priorityFilter">
+        <option value="">All Priority</option>
         <option value="low">Low</option>
         <option value="medium">Medium</option>
         <option value="high">High</option>
       </select>
-      <button type="submit">Create Ticket</button>
-    </form>
-  
-    <h2 class="subHead">All Tickets</h2>
-    <table border="1">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Status</th>
-          <th>Priority</th>
-          <th>Email</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="ticketList"></tbody>
-    </table>
-  
+      <button class="apply-btn" onclick="fetchTickets()">Apply Filters</button>
+    </section>
+
+    <!-- Tickets Table -->
+    <section id="ticketListSection" style="margin-top: 25px;">
+      <h2 class="subHead">All Tickets</h2>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Priority</th>
+              <th>Customer Email</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ticketList">
+            <!-- Filled by app.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Pagination -->
+    <section id="pagination" style="margin-top: 20px;">
+      <button onclick="changePage(-1)">Previous</button>
+      <span id="pageInfo">Page 1 of 1</span>
+      <button onclick="changePage(1)">Next</button>
+    </section>
   </main>
 
-  <footer>
-    <p>&copy; 2025 Support Ticket System | Built with ❤️</p>
-  </footer>
+  <!-- Footer -->
+  <footer>Support Ticket System &copy; 2025</footer>
 
   <script src="app.js"></script>
 </body>
+
 </html>
